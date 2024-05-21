@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h1>Statistics</h1>
+
+<div>
+    <h4>General Statistics</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Total Notes
+        </dt>
+        <dd class="col-sm-10">
+            @ViewData["Count"]
+        </dd>
+        <dt class="col-sm-2">
+            Date Range
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var dateRange = ViewData["Date"] as DateTime[];
+                if (dateRange != null)
+                {
+                    <span>@dateRange[0].ToString("yyyy-MM-dd")</span>
+                   
+                     <span>@dateRange[1].ToString("yyyy-MM-dd")</span>
+                }
+            }
+        </dd>
+    </dl>
+
+    <h4>Unique Values</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Titles
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var title in ViewData["Titles"] as string[])
+                {
+                    <li>@title</li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Descriptions
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var description in ViewData["Descriptions"] as string[])
+                {
+                    <li>@description</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="All">Back to List</a>
+</div>

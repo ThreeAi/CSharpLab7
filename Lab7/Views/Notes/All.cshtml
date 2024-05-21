@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Lab7.Model.Note>
+
+@{
+    ViewData["Title"] = "Notes";
+}
+
+<h1>Notes</h1>
+
+<a asp-action="Stat">Statistic</a>
+
+<form method="get" asp-action="All" class="form-inline mb-2">
+    <div class="form-group mr-2">
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort" class="form-control">
+            <option value="title">Title</option>
+            <option value="description">Description</option>
+            <option value="date">Date</option>
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <label for="n">Display limit:</label>
+        <input type="number" name="n" id="n" class="form-control" min="0" value="0">
+    </div>
+    <button type="submit" class="btn btn-primary">Apply</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    <a asp-action="Add">Add New</a>
+</p>
+

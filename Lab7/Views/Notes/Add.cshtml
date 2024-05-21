@@ -1,0 +1,86 @@
+﻿@model Lab7.Model.Note
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Note</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="noteForm" action="/Notes/Add" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <form id="categoryForm" action="/Notes/BindCategory" method="post">
+                <div class="form-group">
+                    <label class="control-label">Categories</label>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="SelectedCategoryIds" value="@category.Id" />
+                                @category.Title
+                            </label>
+                        </div>
+                    }
+
+                </div>
+            </form>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="submitButton">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="All">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#submitButton').click(function () {
+                var noteFormData = $('#noteForm').serialize();
+
+                $.post('/Notes/Add', noteFormData)
+                    .done(function (response) {
+                        console.log('Note created successfully');
+                        var selectedCategoryIds = [];
+                        $('input[name="SelectedCategoryIds"]:checked').each(function () {
+                            selectedCategoryIds.push($(this).val());
+                        });
+
+                        $.post('/Notes/BindCategory', { SelectedCategoryIds: selectedCategoryIds })
+                            .done(function (response) {
+                                console.log('Categories bound to note successfully');
+                                window.location.href = '/Notes/All';
+                            })
+                            .fail(function () {
+                                console.log('Failed to bind categories to note');
+                            });
+                    })
+                    .fail(function () {
+                        console.log('Failed to create note');
+                    });
+            });
+        });
+    </script>
+}
